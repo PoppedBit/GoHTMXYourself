@@ -48,6 +48,15 @@ type ContactsData struct {
 	Contacts Contacts
 }
 
+func (c *ContactsData) hasEmail(email string) bool {
+	for _, contact := range c.Contacts {
+		if contact.Email == email {
+			return true
+		}
+	}
+	return false
+}
+
 func newContactsDate() ContactsData {
 	return ContactsData{
 		Contacts: Contacts{
@@ -93,6 +102,10 @@ func main() {
 	e.POST("/contacts", func(c echo.Context) error {
 		name := c.FormValue("name")
 		email := c.FormValue("email")
+
+		if contacts.hasEmail(email) {
+			return c.String(http.StatusBadRequest, "Email already exists!")
+		}
 
 		contact := newContact(name, email)
 
