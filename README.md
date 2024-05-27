@@ -7,3 +7,10 @@
 or
 
 `air`
+
+## Notes
+
+HATEOAS
+* Hypermedia As The Engine Of Application State
+* "HTML as application state"
+

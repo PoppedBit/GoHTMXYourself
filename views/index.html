@@ -6,7 +6,9 @@
     </head>
     <body>
         Count {{ .Count}}
-        <button hx-post="/count">Count</button>
+        <!-- onClick handler is the default trigger -->
+        <button hx-post="/count">Bad Count</button> 
+        <button hx-post="/count" hx-target="body">Good Count</button>
     </body>
 </html>
 {{ end }}
