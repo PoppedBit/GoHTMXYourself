@@ -2,10 +2,11 @@
 <html>
     <head>
         <title>Page Count</title>
-        <!-- <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script> -->
+        <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
     </head>
     <body>
         Count {{ .Count}}
+        <button hx-post="/count">Count</button>
     </body>
 </html>
 {{ end }}
