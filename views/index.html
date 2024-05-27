@@ -5,7 +5,10 @@
         <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
     </head>
     <body>
-     {{ template "count" . }}
+        <div id="count">
+            {{ template "count" . }}
+        </div>
+        <button hx-post="/count" hx-target="#count">Count</button>
     </body>
 </html>
 {{ end }}
@@ -13,7 +16,4 @@
 
 {{ block "count" .}}
     Count {{ .Count}}
-    <!-- onClick handler is the default trigger -->
-    <button hx-post="/count">Bad Count</button> 
-    <button hx-post="/count" hx-target="body">Good Count</button>
 {{ end }}
