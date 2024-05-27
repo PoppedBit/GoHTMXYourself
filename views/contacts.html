@@ -1,0 +1,46 @@
+{{ block "contacts" . }}
+
+<html>
+    <head>
+        <title>Contacts</title>
+        <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    </head>
+    <body>
+        {{ template "contact-form" . }}
+        <hr>
+        {{ template "contacts-table" . }}
+    </body>
+</html>
+
+{{ end }}
+
+{{ block "contact-form" . }}
+    <form hx-post="/contacts" hx-target="#contacts-table" hx-swap="beforeend">
+        <input type="text" name="name" placeholder="Name">
+        <input type="email" name="email" placeholder="Email">
+        <button type="submit">Add</button>
+    </form>
+{{ end }}
+
+{{ block "contacts-table" .}}
+    <table id="contacts-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Contacts }}
+                {{ template "contacts-table-row" . }}
+            {{ end }}
+        </tbody>
+    </table>
+{{ end }}
+
+{{ block "contacts-table-row" .}}
+    <tr>
+        <td>{{ .Name }}</td>
+        <td>{{ .Email }}</td>
+    </tr>
+{{ end }}

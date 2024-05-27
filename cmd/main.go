@@ -30,6 +30,33 @@ type Count struct {
 	Count int
 }
 
+type Contact struct {
+	Name  string
+	Email string
+}
+
+func newContact(name, email string) Contact {
+	return Contact{
+		Name:  name,
+		Email: email,
+	}
+}
+
+type Contacts = []Contact
+
+type ContactsData struct {
+	Contacts Contacts
+}
+
+func newContactsDate() ContactsData {
+	return ContactsData{
+		Contacts: Contacts{
+			newContact("John Doe", "john.doe@email.com"),
+			newContact("Jane Doe", "jane.doe@email.com"),
+		},
+	}
+}
+
 func main() {
 
 	// ENV
@@ -56,6 +83,22 @@ func main() {
 	e.POST("/count", func(c echo.Context) error {
 		count.Count++
 		return c.Render(http.StatusOK, "count", count)
+	})
+
+	// Contacts
+	contacts := newContactsDate()
+	e.GET("/contacts", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "contacts", contacts)
+	})
+	e.POST("/contacts", func(c echo.Context) error {
+		name := c.FormValue("name")
+		email := c.FormValue("email")
+
+		contact := newContact(name, email)
+
+		contacts.Contacts = append(contacts.Contacts, contact)
+
+		return c.Render(http.StatusOK, "contacts-table-row", contact)
 	})
 
 	e.Logger.Fatal(e.Start(":" + port))
