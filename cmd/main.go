@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -27,15 +26,8 @@ func NewTemplates() *Templates {
 	}
 }
 
-type Block struct {
-	Id int
-}
-
-type Blocks struct {
-	Start  int
-	Next   int
-	More   bool
-	Blocks []Block
+type Count struct {
+	Count int
 }
 
 func main() {
@@ -45,35 +37,21 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
-
 	port := os.Getenv("PORT")
 
+	// Server
 	e := echo.New()
+
+	// Renderer
 	e.Renderer = NewTemplates()
+
+	// ???
 	e.Use(middleware.Logger())
 
-	e.GET("/blocks", func(c echo.Context) error {
-		startStr := c.QueryParam("start")
-		start, err := strconv.Atoi(startStr)
-		if err != nil {
-			start = 0
-		}
-
-		blocks := []Block{}
-		for i := start; i < start+10; i++ {
-			blocks = append(blocks, Block{Id: i})
-		}
-
-		template := "blocks"
-		if start == 0 {
-			template = "blocks-index"
-		}
-		return c.Render(http.StatusOK, template, Blocks{
-			Start:  start,
-			Next:   start + 10,
-			More:   start+10 < 100,
-			Blocks: blocks,
-		})
+	count := Count{Count: 0}
+	e.GET("/", func(c echo.Context) error {
+		count.Count++
+		return c.Render(http.StatusOK, "index", count)
 	})
 
 	e.Logger.Fatal(e.Start(":" + port))
